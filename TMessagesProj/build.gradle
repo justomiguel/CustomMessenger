@@ -1,0 +1,83 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.0'
+    }
+}
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:20.0.+'
+    compile 'com.google.android.gms:play-services:3.2.+'
+    compile 'net.hockeyapp.android:HockeySDK:3.0.2'
+    compile 'com.googlecode.mp4parser:isoparser:1.0.+'
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion '21.0.2'
+
+
+    signingConfigs {
+
+        release {
+            storeFile file("../desktopify.keystore")
+            keyAlias 'desktopify.keystore'
+            keyPassword 'c87haqAX'
+            storePassword 'j56UZusp'
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
+    buildTypes {
+
+        release {
+            debuggable false
+            signingConfig signingConfigs.release
+        }
+
+        foss {
+            debuggable false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    sourceSets.main {
+        jniLibs.srcDir 'libs'
+        jni.srcDirs = [] //disable automatic ndk-build call
+    }
+
+    sourceSets {
+        debug {
+            manifest.srcFile 'config/debug/AndroidManifest.xml'
+        }
+        release {
+            manifest.srcFile 'config/release/AndroidManifest.xml'
+        }
+        foss {
+            manifest.srcFile 'config/foss/AndroidManifest.xml'
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 19
+        versionCode 374
+        versionName "1.9.6"
+
+        applicationId "com.jmv.frre.moduloestudiante"
+    }
+}
